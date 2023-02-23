@@ -11,6 +11,6 @@ public class BotConfiguration {
     @Value("${telegram.bot.name}")
     private String name;
 
-    @Value("${telegram.bot.token}")
+    @Value("${TELEGRAM_BOT_TOKEN}")
     private String token;
 }
