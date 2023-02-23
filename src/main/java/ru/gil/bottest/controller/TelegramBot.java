@@ -60,6 +60,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 mess.setText("Выберети этап");
                 mess.setReplyMarkup(sendInlineKeyBoard());
                 sendAnswerMessage(mess);
+            } else if ("/start".equals(update.getMessage().getText())) {
+                SendMessage message = messageUtils.generateSendMessageWithText(update,
+                        "Привет " + update.getMessage().getChat().getFirstName());
+                sendAnswerMessage(message);
+                log.info("Приветствие");
             }
         }
     }
