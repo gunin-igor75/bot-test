@@ -28,12 +28,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfiguration botConfiguration;
 
-    private final MessageUtils messageUtils;
-
-    public TelegramBot(BotConfiguration botConfiguration, MessageUtils messageUtils) {
+    public TelegramBot(BotConfiguration botConfiguration) {
         super(botConfiguration.getToken());
         this.botConfiguration = botConfiguration;
-        this.messageUtils = messageUtils;
     }
     @Override
     public String getBotUsername() {
@@ -54,12 +51,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update != null) {
-            if ("/menu".equals(update.getMessage().getText())) {
+            if ("/info".equals(update.getMessage().getText())) {
                 SendMessage mess = new SendMessage();
                 mess.setChatId(update.getMessage().getChatId());
-                mess.setText("Выберети этап");
+                mess.setText("Выберете этап");
                 mess.setReplyMarkup(sendInlineKeyBoard());
                 sendAnswerMessage(mess);
+
             } else if ("/start".equals(update.getMessage().getText())) {
                 SendMessage message = messageUtils.generateSendMessageWithText(update,
                         "Привет " + update.getMessage().getChat().getFirstName());
@@ -88,17 +86,23 @@ public class TelegramBot extends TelegramLongPollingBot {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
-        inlineKeyboardButton1.setText("Алтайский край");
-        inlineKeyboardButton1.setCallbackData("Алтайский край");
-        inlineKeyboardButton2.setText("Амурская область");
-        inlineKeyboardButton2.setCallbackData("Амурская область");
+        InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
+        inlineKeyboardButton1.setText("Этап №1");
+        inlineKeyboardButton1.setCallbackData("Этап №1");
+        inlineKeyboardButton2.setText("Этап №2");
+        inlineKeyboardButton2.setCallbackData("Этап №2");
+        inlineKeyboardButton3.setText("Этап №3");
+        inlineKeyboardButton3.setCallbackData("Этап №3");
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<>();
         keyboardButtonsRow1.add(inlineKeyboardButton1);
         keyboardButtonsRow2.add(inlineKeyboardButton2);
+        keyboardButtonsRow3.add(inlineKeyboardButton3);
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
         rowList.add(keyboardButtonsRow2);
+        rowList.add(keyboardButtonsRow3);
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
     }
