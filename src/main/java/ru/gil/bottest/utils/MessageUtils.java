@@ -12,21 +12,10 @@ import ru.gil.bottest.controller.TelegramBot;
 @Slf4j
 public class MessageUtils {
 
-    private final TelegramBot telegramBot;
-
-    public MessageUtils(TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
-    }
-
-    public void sendAnswerMessage(Update update, String text) {
+    public SendMessage generationSendMessage(Update update, String text) {
         SendMessage response = new SendMessage();
         response.setChatId(update.getMessage().getChatId());
         response.setText(text);
-        try {
-            telegramBot.execute(response);
-        } catch (TelegramApiException e) {
-            log.error("Error send message", e);
-        }
+        return response;
     }
-
 }
