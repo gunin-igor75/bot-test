@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class ComponentMenu {
 
-    public InlineKeyboardMarkup sendInlineKeyBoard() {
+    public InlineKeyboardMarkup createMenuInfo() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
@@ -36,6 +36,34 @@ public class ComponentMenu {
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
     }
+
+    public InlineKeyboardMarkup createMenuApp() {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
+        inlineKeyboardButton1.setText("pets");
+        inlineKeyboardButton1.setCallbackData("pets");
+        inlineKeyboardButton2.setText("registration");
+        inlineKeyboardButton2.setCallbackData("registration");
+        inlineKeyboardButton3.setText("report");
+        inlineKeyboardButton3.setCallbackData("report");
+        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<>();
+        keyboardButtonsRow1.add(inlineKeyboardButton1);
+        keyboardButtonsRow2.add(inlineKeyboardButton2);
+        keyboardButtonsRow3.add(inlineKeyboardButton3);
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow1);
+        rowList.add(keyboardButtonsRow2);
+        rowList.add(keyboardButtonsRow3);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
+    }
+
+
+
 
     public ReplyKeyboardMarkup setButtons() {
         ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();

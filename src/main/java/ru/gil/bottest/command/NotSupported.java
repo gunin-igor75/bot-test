@@ -15,6 +15,8 @@ public class NotSupported implements Command{
 
     @Override
     public SendMessage execute(Update update) {
-        return null;
+        String name = update.getMessage().getChat().getFirstName();
+        return messageUtils.generationSendMessage(update,
+                "Не поддерживаю эти операции " + name);
     }
 }

@@ -58,27 +58,20 @@ public class TelegramBot extends TelegramLongPollingBot {
             String key = update.getMessage().getText().split("\\s+")[0].substring(1);
             System.out.println(key);
             message = storage.getStorage().get(key).execute(update);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getMessage().hasText() &&
+                update.getCallbackQuery().getMessage().getText().startsWith(PREFIX)) {
+            String key = update.getCallbackQuery().getMessage().getText().split("\\s+")[0].substring(1);
+            message = storage.getStorage().get(key).execute(update);
         } else {
-            message = storage.getStorage().get("notSupported").execute(update);
+            if (update.hasCallbackQuery()) {
+                message = new SendMessage();
+                message.setChatId(update.getCallbackQuery().getMessage().getChatId());
+                message.setText("Что то нет упс.........");
+            } else {
+                message = storage.getStorage().get("notSupported").execute(update);
+            }
         }
         sendAnswerMessage(message);
-
-
-        //        if (update != null) {
-//            if ("/info".equals(update.getMessage().getText())) {
-//                SendMessage mess = new SendMessage();
-//                mess.setChatId(update.getMessage().getChatId());
-//                mess.setText("Выберете этап");
-//                mess.setReplyMarkup(sendInlineKeyBoard());
-//                sendAnswerMessage(mess);
-//
-//            } else if ("/start".equals(update.getMessage().getText())) {
-//                SendMessage message = messageUtils.generateSendMessageWithText(update,
-//                        "Привет " + update.getMessage().getChat().getFirstName());
-//                sendAnswerMessage(message);
-//                log.info("Приветствие");
-//            }
-//        }
     }
 
 

@@ -1,7 +1,6 @@
 package ru.gil.bottest.command;
 
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
