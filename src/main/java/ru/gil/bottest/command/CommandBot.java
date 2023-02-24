@@ -4,14 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum CommandBot {
-    START("/start"),
-    INFO("/info"),
-    APP("/app"),
-    REGISTER("/register"),
-    PETS("/pets"),
-    REPORT("/report"),
+    START("startCommand"),
+    INFO("infoCommand"),
+    APP("appCommand"),
+//    REGISTER("registerCommand"),
+//    PETS("petsCommand"),
+//    REPORT("reportCommand"),
 
-    NO("/not supported");
+    NO("notSupportedCommand");
 
     private final String value;
 

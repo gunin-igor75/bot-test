@@ -6,6 +6,8 @@ import ru.gil.bottest.utils.MessageUtils;
 @Component
 public class StartCommand implements Command {
 
+    private final CommandBot commandBot = CommandBot.START;
+
     private final MessageUtils messageUtils;
 
     public StartCommand(MessageUtils messageUtils) {
