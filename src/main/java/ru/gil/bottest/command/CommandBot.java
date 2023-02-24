@@ -1,5 +1,8 @@
 package ru.gil.bottest.command;
 
+import lombok.Getter;
+
+@Getter
 public enum CommandBot {
     START("/start"),
     INFO("/info"),
