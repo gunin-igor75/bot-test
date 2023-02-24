@@ -2,9 +2,7 @@ package ru.gil.bottest.component;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,23 +58,5 @@ public class ComponentMenu {
         rowList.add(keyboardButtonsRow3);
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
-    }
-
-
-
-
-    public ReplyKeyboardMarkup setButtons() {
-        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
-        markup.setSelective(true);
-        markup.setResizeKeyboard(true);
-        markup.setOneTimeKeyboard(false);
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardRowFirst = new KeyboardRow();
-        keyboardRowFirst.add("Этап №1");
-        keyboardRowFirst.add("Этап №2");
-        keyboardRowFirst.add("Этап №3");
-        keyboard.add(keyboardRowFirst);
-        markup.setKeyboard(keyboard);
-        return markup;
     }
 }

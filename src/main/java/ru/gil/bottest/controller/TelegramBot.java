@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
 
-    private String PREFIX = "/";
+    private final String PREFIX = "/";
 
     private final BotConfiguration botConfiguration;
 
@@ -95,6 +95,4 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.error("Error send message", e);
         }
     }
-
-
 }
