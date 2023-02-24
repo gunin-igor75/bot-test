@@ -50,67 +50,31 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update != null) {
-            if ("/info".equals(update.getMessage().getText())) {
-                SendMessage mess = new SendMessage();
-                mess.setChatId(update.getMessage().getChatId());
-                mess.setText("Выберете этап");
-                mess.setReplyMarkup(sendInlineKeyBoard());
-                sendAnswerMessage(mess);
 
-            } else if ("/start".equals(update.getMessage().getText())) {
-                SendMessage message = messageUtils.generateSendMessageWithText(update,
-                        "Привет " + update.getMessage().getChat().getFirstName());
-                sendAnswerMessage(message);
-                log.info("Приветствие");
-            }
-        }
+        //        if (update != null) {
+//            if ("/info".equals(update.getMessage().getText())) {
+//                SendMessage mess = new SendMessage();
+//                mess.setChatId(update.getMessage().getChatId());
+//                mess.setText("Выберете этап");
+//                mess.setReplyMarkup(sendInlineKeyBoard());
+//                sendAnswerMessage(mess);
+//
+//            } else if ("/start".equals(update.getMessage().getText())) {
+//                SendMessage message = messageUtils.generateSendMessageWithText(update,
+//                        "Привет " + update.getMessage().getChat().getFirstName());
+//                sendAnswerMessage(message);
+//                log.info("Приветствие");
+//            }
+//        }
     }
 
-    public ReplyKeyboardMarkup setButtons() {
-        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
-        markup.setSelective(true);
-        markup.setResizeKeyboard(true);
-        markup.setOneTimeKeyboard(false);
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardRowFirst = new KeyboardRow();
-        keyboardRowFirst.add("Этап №1");
-        keyboardRowFirst.add("Этап №2");
-        keyboardRowFirst.add("Этап №3");
-        keyboard.add(keyboardRowFirst);
-        markup.setKeyboard(keyboard);
-        return markup;
-    }
-
-    public InlineKeyboardMarkup sendInlineKeyBoard() {
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
-        inlineKeyboardButton1.setText("Этап №1");
-        inlineKeyboardButton1.setCallbackData("Этап №1");
-        inlineKeyboardButton2.setText("Этап №2");
-        inlineKeyboardButton2.setCallbackData("Этап №2");
-        inlineKeyboardButton3.setText("Этап №3");
-        inlineKeyboardButton3.setCallbackData("Этап №3");
-        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<>();
-        keyboardButtonsRow1.add(inlineKeyboardButton1);
-        keyboardButtonsRow2.add(inlineKeyboardButton2);
-        keyboardButtonsRow3.add(inlineKeyboardButton3);
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(keyboardButtonsRow1);
-        rowList.add(keyboardButtonsRow2);
-        rowList.add(keyboardButtonsRow3);
-        inlineKeyboardMarkup.setKeyboard(rowList);
-        return inlineKeyboardMarkup;
-    }
 
     private void createMenu() {
         List<BotCommand> commandList = new ArrayList<>();
-        commandList.add(new BotCommand("/start", "begin work"));
-        commandList.add(new BotCommand("/info", "begin menu"));
+        commandList.add(new BotCommand("/start", "Приветсвие бота"));
+        commandList.add(new BotCommand("/info", "Информация о приюте"));
+        commandList.add(
+                new BotCommand("/app", "Просмотр, усыновление питомцев, отчеты"));
         try {
             execute(new SetMyCommands(commandList, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
@@ -118,13 +82,4 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    public void sendAnswerMessage(SendMessage message) {
-        if (message != null) {
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                log.error("Error send message", e);
-            }
-        }
-    }
 }

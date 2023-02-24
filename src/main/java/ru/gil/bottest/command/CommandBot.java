@@ -1,7 +1,18 @@
 package ru.gil.bottest.command;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
+public enum CommandBot {
+    START("/start"),
+    INFO("/info"),
+    APP("/app"),
+    REGISTER("/register"),
+    PETS("/pets"),
+    REPORT("/report"),
 
-public interface CommandBot {
-    void execute(Update update);
+    NO("/not supported");
+
+    private final String value;
+
+    CommandBot(String value) {
+        this.value = value;
+    }
 }
