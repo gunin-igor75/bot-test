@@ -1,6 +1,7 @@
 package ru.gil.bottest.controller;
 
 import jakarta.annotation.PostConstruct;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -33,6 +34,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.botConfiguration = botConfiguration;
         this.storage = storage;
     }
+
     @Override
     public String getBotUsername() {
         return botConfiguration.getName();
@@ -49,14 +51,13 @@ public class TelegramBot extends TelegramLongPollingBot {
         createMenu();
     }
 
+    @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         SendMessage message;
-        System.out.println(storage.getStorage());
         if (update.hasMessage() && update.getMessage().hasText() &&
                 update.getMessage().getText().startsWith(PREFIX)) {
             String key = update.getMessage().getText().split("\\s+")[0].substring(1);
-            System.out.println(key);
             message = storage.getStorage().get(key).execute(update);
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getMessage().hasText() &&
                 update.getCallbackQuery().getMessage().getText().startsWith(PREFIX)) {
@@ -81,6 +82,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         commandList.add(new BotCommand("/info", "Информация о приюте"));
         commandList.add(
                 new BotCommand("/app", "Просмотр, усыновление питомцев, отчеты"));
+        commandList.add(
+                new BotCommand("/volunteer", "Позвать волонтера"));
         try {
             execute(new SetMyCommands(commandList, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {

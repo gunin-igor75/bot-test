@@ -13,6 +13,8 @@ import ru.gil.bottest.controller.TelegramBot;
 @Slf4j
 public class MessageUtils {
 
+    private final long CHAT_ID = 1998202918L;
+
     public SendMessage generationSendMessage(Update update, String text) {
         SendMessage response = new SendMessage();
         response.setChatId(update.getMessage().getChatId());
@@ -25,6 +27,13 @@ public class MessageUtils {
         response.setChatId(update.getMessage().getChatId());
         response.setText(text);
         response.setReplyMarkup(markup);
+        return response;
+    }
+
+    public SendMessage sendMessageOwnerBot(String text) {
+        SendMessage response = new SendMessage();
+        response.setChatId(CHAT_ID);
+        response.setText(text);
         return response;
     }
 }
