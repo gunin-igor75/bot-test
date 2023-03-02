@@ -1,7 +1,6 @@
 package ru.gil.bottest.controller;
 
 import jakarta.annotation.PostConstruct;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -15,24 +14,47 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.gil.bottest.command.CommandStorage;
 import ru.gil.bottest.configuration.BotConfiguration;
+import ru.gil.bottest.utils.MessageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TelegramBot - Клас, который отвечает регистрацию, первичну настройку бота
+ * и за взаимодействие бота с пользователем
+ */
 @Component
 @Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
 
-    private final String PREFIX = "/";
-
+    /**
+     * botConfiguration бин конфигурации бота
+     */
     private final BotConfiguration botConfiguration;
 
-    private final CommandStorage storage;
+    /**
+     * бин утилитного класса, отвечающего за формирования сообщений
+     */
+    private final MessageUtils messageUtils;
 
-    public TelegramBot(BotConfiguration botConfiguration, CommandStorage storage) {
+    /**
+     * бин, содержащий ассоциативный массив, где
+     * ключ - название бина(класса отвечающий за действие в ответ на команду бота)
+     * значение - сам бин
+     */
+    private final CommandStorage commandStorage;
+
+    /**
+     * Пефикс входящего сообщения
+     */
+    private final String PREFIX = "/";
+
+
+    public TelegramBot(BotConfiguration botConfiguration, MessageUtils messageUtils, CommandStorage commandStorage) {
         super(botConfiguration.getToken());
         this.botConfiguration = botConfiguration;
-        this.storage = storage;
+        this.messageUtils = messageUtils;
+        this.commandStorage = commandStorage;
     }
 
     @Override
@@ -40,6 +62,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         return botConfiguration.getName();
     }
 
+    /**
+     * Метод отвечающий за регитсрацию бота и формирования главногоменю
+     */
     @PostConstruct
     public void init() {
         try {
@@ -51,49 +76,56 @@ public class TelegramBot extends TelegramLongPollingBot {
         createMenu();
     }
 
-    @SneakyThrows
+    /**
+     * Основная логика контроллера:
+     * рассматривает 2 варианта:
+     * - если текстовое сообщение содержится в update.getMessage()
+     * - если текстовое сообщение содержиься в реакции на нажатую кнопку
+     *
+     * @param update - входящи параметр при прослушиванием бота входящих сообщени
+     */
     @Override
     public void onUpdateReceived(Update update) {
-        SendMessage message;
+        SendMessage message = null;
         if (update.hasMessage() && update.getMessage().hasText() &&
                 update.getMessage().getText().startsWith(PREFIX)) {
             String key = update.getMessage().getText().split("\\s+")[0].substring(1);
-            message = storage.getStorage().get(key).execute(update);
+            message = commandStorage.getStorage().get(key).execute(update);
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getMessage().hasText() &&
                 update.getCallbackQuery().getMessage().getText().startsWith(PREFIX)) {
             String key = update.getCallbackQuery().getMessage().getText().split("\\s+")[0].substring(1);
-            message = storage.getStorage().get(key).execute(update);
-        } else {
-            if (update.hasCallbackQuery()) {
-                message = new SendMessage();
-                message.setChatId(update.getCallbackQuery().getMessage().getChatId());
-                message.setText("Что то нет упс.........");
-            } else {
-                message = storage.getStorage().get("notSupported").execute(update);
-            }
+            message = commandStorage.getStorage().get(key).execute(update);
         }
         sendAnswerMessage(message);
     }
 
-
+    /**
+     * Метод формирующий главное меню бота
+     */
     private void createMenu() {
         List<BotCommand> commandList = new ArrayList<>();
-        commandList.add(new BotCommand("/start", "Приветсвие бота"));
-        commandList.add(new BotCommand("/info", "Информация о приюте"));
-        commandList.add(
-                new BotCommand("/app", "Просмотр, усыновление питомцев, отчеты"));
-        commandList.add(
-                new BotCommand("/volunteer", "Позвать волонтера"));
+        commandList.add(new BotCommand("/shelter", "Информация о приюте"));
+        commandList.add(new BotCommand("/adoption", "Как взять питомца из приюта"));
+        commandList.add(new BotCommand("/application", "Регистрация, усыновление"));
+        commandList.add(new BotCommand("/report", "Прислать отчет о питомце"));
+        commandList.add(new BotCommand("/volunteer", "Позвать волонтера"));
         try {
             execute(new SetMyCommands(commandList, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
-            log.error("Error command ", e);
+            log.error("Error crete menu", e);
         }
     }
 
+    /**
+     * Метод отправляющий сообщение пользователю
+     * @param message - объект SendMessage, полученный от определенной команды
+     */
+
     public void sendAnswerMessage(SendMessage message) {
         try {
-            execute(message);
+            if (message != null) {
+                execute(message);
+            }
         } catch (TelegramApiException e) {
             log.error("Error send message", e);
         }

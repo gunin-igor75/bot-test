@@ -1,23 +1,25 @@
-package ru.gil.bottest.model;
+package ru.gil.bottest.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name="pet")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "name",unique = true,nullable = false)
     private String name;
-
+    @Column(name = "adopted",nullable = false)
     private boolean adopted;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "report_id")
     private Report report;
-
 }

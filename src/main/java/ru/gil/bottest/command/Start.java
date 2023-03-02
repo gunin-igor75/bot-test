@@ -4,10 +4,13 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.gil.bottest.utils.MessageUtils;
-@Component
-public class Start implements Command {
 
-    private final CommandBot commandBot = CommandBot.START;
+
+/**
+ * Данный класс формрует сообщения исодя из выбора start
+ */
+@Component
+public class Start implements Command{
 
     private final MessageUtils messageUtils;
 
@@ -17,8 +20,8 @@ public class Start implements Command {
 
     @Override
     public SendMessage execute(Update update) {
-        String name = update.getMessage().getChat().getFirstName();
-        return messageUtils.generationSendMessage(update,
-                "Привет " + name);
+        String userName = update.getMessage().getChat().getUserName();
+        return messageUtils.generationSendMessage(update, "Здравствуйте " + userName +
+                " Вас приветствует бот приюта!");
     }
 }
